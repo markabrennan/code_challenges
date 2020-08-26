@@ -50,10 +50,43 @@ def get_permutations(string):
 
     return permutations
 
+"""
+Version with list of ints instead of string
+"""
+def perm(nums):
+    if len(nums) <= 1:
+        return nums
+    l = nums[:-1]
+    r = nums[-1]
+    perm_list = []
+    perms = perm(l)
+    if len(perms) == 1:
+        perm_list.append(perms + [r])
+        perm_list.append([r] + perms)
+        return perm_set
+    else:
+        for permute in perms:
+            for p in range(len(l) + 1):
+                permutation = permute[:p] + [r] + permute[p:]
+                perm_list.append(permutation)
+        return perm_list
+
+
+"""
+TEST CASES
+"""
+print(perm([1,2,3]))
+
+perms = perm([1,2,3])
+print(sorted(perms))
+
+#print(get_permutations('abc'))
+
+
 
 #s = 'cat'
-s = "ivicc"
-print(get_permutations(s))
+#s = "ivicc"
+#print(get_permutations(s))
 
 #ar = ['c', 'a', 't']
 #print(permute(ar))
