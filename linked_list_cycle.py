@@ -121,6 +121,98 @@ def reverse(head):
         cur = nxt
     return prev
 
+"""
+Official solution from Grokking The Coding Interview
+for reversed sub_list
+"""
+def reverse_sub_list(head, p, q):
+    if p == q:
+        return head
+    # after skipping 'p-1' nodes, current will point to 'p'th node
+    current, previous = head, None
+    i = 0
+    while current is not None and i < p - 1:
+        previous = current
+        current = current.next
+        i += 1
+    # we are interested in three parts of the LinkedList, the part before index 'p',
+    # the part between 'p' and 'q', and the part after index 'q'
+    last_node_of_first_part = previous
+    # after reversing the LinkedList 'current' will become the last node of the sub-list
+    last_node_of_sub_list = current
+    next = None  # will be used to temporarily store the next node
+    i = 0
+    # reverse nodes between 'p' and 'q'
+    while current is not None and i < q - p + 1:
+        next = current.next
+        current.next = previous
+        previous = current
+        current = next
+        i += 1
+    # connect with the first part
+    if last_node_of_first_part is not None:
+        # 'previous' is now the first node of the sub-list
+        last_node_of_first_part.next = previous
+    # this means p == 1 i.e., we are changing the first node (head) of the LinkedList
+    else:
+        head = previous
+    # connect with the last part
+    last_node_of_sub_list.next = current
+    return head
+
+
+"""
+same version, different variable naming, based on my own code
+"""
+def rev_sub_list2(head, p, q):
+    i = 0
+    prev = nxt = None
+    cur = head
+    p_minus_node = None
+    p_plus_node = None
+    while cur and i < p-1:
+        prev = cur
+        cur = cur.next
+        i += 1
+    p_minus_node = prev
+    p_plus_node = cur
+    i = 0
+    while cur and i < q - p + 1:
+        nxt = cur.next
+        cur.next = prev
+        prev = cur
+        cur = nxt
+        i += 1
+    if p_minus_node is not None:
+        p_minus_node.next = prev
+    else:
+        head = prev
+    p_plus_node.next = cur
+    return head
+
+
+def rev_sublist(head, p, q):
+    prev = nxt = None
+    cur = p_minus = head
+    q_plus = None
+    cnt = 1
+    end = 1
+    while cur:
+        nxt = cur.next
+        if cnt == p and cnt != q:
+            q_plus = cur.next
+            cur.next = prev
+            prev = cur
+        else:
+            if prev is not None:
+                prev.next = cur
+            else:
+                prev = cur
+                prev.next = None
+            last = cur
+        cur = nxt
+        cnt += 1
+    return prev
 
 def reorder(head):
     print(print_list(head))
@@ -171,13 +263,29 @@ TEST CASES
 
 #print(find_middle_of_linked_list2(head).value)
 
-head = Node(2)
-head.next = Node(4)
-head.next.next = Node(6)
-head.next.next.next = Node(8)
-head.next.next.next.next = Node(10)
-head.next.next.next.next.next = Node(12)
+# head = Node(2)
+# head.next = Node(4)
+# head.next.next = Node(6)
+# head.next.next.next = Node(8)
+# head.next.next.next.next = Node(10)
+# head.next.next.next.next.next = Node(12)
 
 # print(print_list(head))
 # print(print_list(remove_nth_from_end(head, 2)))
-print(print_list(reorder(head)))
+#print(print_list(reorder(head)))
+
+# test case for reversed sub_list
+n1 = Node(1)
+n2 = Node(2)
+n3 = Node(3)
+n4 = Node(4)
+n5 = Node(5)
+
+n1.next = n2
+n2.next = n3
+n3.next = n4
+n4.next = n5
+
+print(print_list(n1))
+
+print(print_list(rev_sub_list2(n1, 2,4)))

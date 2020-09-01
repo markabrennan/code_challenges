@@ -65,7 +65,39 @@ def min_conns2(connections, num):
 
 
 def bfs(connections):
+    Q = deque()
+    unique_nodes = set()
+    # we still need to create the graph (adjacency list):
+    graph = {}
+    for node1, node2, cost in connections:
+        if node1 not in graph:
+            graph[node1] = [(node2, cost)]
+        else:
+            graph[node1].append((node2, cost))
+    # now assume we are looking to get from "A" to "E"
+    # let's do a BFS from "A" to "E"
+    start_node = "A"
+    end_node = "E"
+    unique_set = set(start_node)
+    path = {start_node:None}
+    Q.append(start_node)
+    while Q:
+        cur_node = Q.popleft()
+        if cur_node == end_node:
+            break
+        for neighbor, _ in graph[cur_node]:
+            if neighbor not in unique_set:
+                unique_set.add(neighbor)
+                Q.append(neighbor)
+                path[neighbor] = cur_node
 
+    shortest_path = []
+    cur_node = end_node
+    while cur_node:
+        shortest_path.append(cur_node)
+        cur_node = path[cur_node]
+    shortest_path.reverse() 
+    return shortest_path
 
 
 """
@@ -86,4 +118,6 @@ connections = [
 print(connections)
 #print(min_connection_cost(connections, num))
 
-print(min_conns2(connections, num))
+#print(min_conns2(connections, num))
+
+print(bfs(connections))
